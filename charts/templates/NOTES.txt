@@ -1,0 +1,2 @@
+Get information about the app mesh by running
+kubectl describe mesh {{ .Values.name }}

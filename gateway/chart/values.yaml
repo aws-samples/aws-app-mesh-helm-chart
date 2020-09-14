@@ -27,6 +27,7 @@ probes:
 
 mesh:
   arn:
+  podServiceAccount: meshed-pod-account # Per-namespace ServiceAccount 
 
 ingress:
   fargate: false # set to true if the namespace where the Gateway will be running is assigned to Fargate.

@@ -25,6 +25,9 @@ spec:
       annotations:
         buildID: {{ .Values.buildID | default "" | quote }}
     spec:
+      serviceAccountName: {{ .Values.mesh.podServiceAccount }}
+      securityContext:
+        fsGroup: 1337
       containers:
         - name: envoy # {{ .Chart.Name }}
         {{- if eq $awsRegion "me-south-1" }}

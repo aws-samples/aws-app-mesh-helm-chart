@@ -1,0 +1,21 @@
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: VirtualGateway
+metadata:
+  name: {{ template "eks-app-mesh-gateway.fullname" . }}
+  labels:
+    app: {{ template "eks-app-mesh-gateway.name" . }}
+    chart: {{ template "eks-app-mesh-gateway.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  namespaceSelector:
+    matchLabels:
+      gateway: {{ template "eks-app-mesh-gateway.fullname" . }}
+  podSelector:
+    matchLabels:
+      app: {{ template "eks-app-mesh-gateway.name" . }}
+      release: {{ .Release.Name }}
+  listeners:
+    - portMapping:
+        port: {{ .Values.deployment.containerPort }}
+        protocol: http

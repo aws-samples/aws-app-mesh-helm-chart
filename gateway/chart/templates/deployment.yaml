@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "eks-app-mesh-gateway.fullname" . }}
+  labels:
+    app: {{ template "eks-app-mesh-gateway.name" . }}
+    chart: {{ template "eks-app-mesh-gateway.chart" . }}
+    draft: {{ .Values.draft | default "draft-app" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  revisionHistoryLimit: 0
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "eks-app-mesh-gateway.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "eks-app-mesh-gateway.name" . }}
+        draft: {{ .Values.draft | default "draft-app" }}
+        release: {{ .Release.Name }}
+      annotations:
+        buildID: {{ .Values.buildID | default "" | quote }}
+    spec:
+      containers:
+        - name: envoy # {{ .Chart.Name }}
+        {{- if eq .Values.image.awsRegion "me-south-1" }}
+          image: "772975370895.dkr.ecr.me-south-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
+        {{- else if eq .Values.image.awsRegion "ap-east-1" }}
+          image: "856666278305.dkr.ecr.ap-east-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
+        {{- else }}
+          image: "840364872350.dkr.ecr.{{ .Values.image.awsRegion }}.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
+        {{- end }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.deployment.containerPort }}
+          {{- if .Values.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          env:
+            - name: AWS_REGION
+              value: {{ .Values.image.awsRegion }}
+            - name: APPMESH_RESOURCE_ARN
+              value: {{ .Values.mesh.arn }}
+            {{- $root := . }}
+            {{- range $ref, $values := .Values.secrets }}
+            {{- range $key, $value := $values }}
+            - name: {{ $ref }}_{{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "eks-app-mesh-gateway.fullname" $root }}-{{ $ref | lower }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

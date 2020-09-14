@@ -1,0 +1,73 @@
+# Default values for eks-app-mesh-gateway.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+fullnameOverride: eks-app-mesh-gateway
+replicaCount: 1
+
+image:
+  awsRegion: "CLUSTER-AWS-REGION" # <= must be replaced with valid region where EKS cluster is deployed
+  tag: v1.15.0.0-prod # Latest version info is at https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+  # Optionally specify an array of imagePullSecrets.
+  # Secrets must be manually created in the namespace.
+  # ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+  #
+  # This uses credentials from secret "myRegistryKeySecretName".
+  # - name: myRegistryKeySecretName
+service:
+  type: ClusterIP
+  port: 80
+
+deployment:
+  containerPort: 8088
+
+probes:
+  enabled: false
+
+mesh:
+  arn: "SPECIFY-VLIAD-MESH-ARN" # replace with valid Mesh ARN
+
+ingress:
+  fargate: false # set to true if the namespace where the Gateway will be running is assigned to Fargate.
+  annotations:
+    # kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+  path: /*
+  # hosts:
+  #   - chart-example.local
+  tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+secrets: {}
+  # Optionally specify a set of secret objects whose values
+  # will be injected as environment variables by default.
+  # You should add this section to a file like secrets.yaml
+  # that is explicitly NOT committed to source code control
+  # and then include it as part of your helm install step.
+  # ref: https://kubernetes.io/docs/concepts/configuration/secret/
+  #
+  # This creates a secret "mysecret" and injects "mypassword"
+  # as the environment variable mysecret_mypassword=password.
+  # mysecret:
+  #   mypassword: password
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

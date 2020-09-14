@@ -1,11 +1,11 @@
 # Default values for eks-app-mesh-gateway.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-fullnameOverride: eks-app-mesh-gateway
+# fullnameOverride: eks-app-mesh-gateway
 replicaCount: 1
 
 image:
-  awsRegion: "CLUSTER-AWS-REGION" # <= must be replaced with valid region where EKS cluster is deployed
+  awsRegion:
   tag: v1.15.0.0-prod # Latest version info is at https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html
   pullPolicy: IfNotPresent
 imagePullSecrets: []
@@ -26,7 +26,7 @@ probes:
   enabled: false
 
 mesh:
-  arn: "SPECIFY-VLIAD-MESH-ARN" # replace with valid Mesh ARN
+  arn:
 
 ingress:
   fargate: false # set to true if the namespace where the Gateway will be running is assigned to Fargate.

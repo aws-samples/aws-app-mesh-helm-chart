@@ -1,3 +1,4 @@
+{{- $awsRegion := required "Plese provide AWS region" .Values.image.awsRegion -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -26,12 +27,12 @@ spec:
     spec:
       containers:
         - name: envoy # {{ .Chart.Name }}
-        {{- if eq .Values.image.awsRegion "me-south-1" }}
+        {{- if eq $awsRegion "me-south-1" }}
           image: "772975370895.dkr.ecr.me-south-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
-        {{- else if eq .Values.image.awsRegion "ap-east-1" }}
+        {{- else if eq $awsRegion "ap-east-1" }}
           image: "856666278305.dkr.ecr.ap-east-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- else }}
-          image: "840364872350.dkr.ecr.{{ .Values.image.awsRegion }}.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
+          image: "840364872350.dkr.ecr.{{ $awsRegion }}.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -49,9 +50,9 @@ spec:
           {{- end }}
           env:
             - name: AWS_REGION
-              value: {{ .Values.image.awsRegion }}
+              value: {{ $awsRegion }}
             - name: APPMESH_RESOURCE_ARN
-              value: {{ .Values.mesh.arn }}
+              value: {{ required "Please specify App Mesh ARN" .Values.mesh.arn }}
             {{- $root := . }}
             {{- range $ref, $values := .Values.secrets }}
             {{- range $key, $value := $values }}

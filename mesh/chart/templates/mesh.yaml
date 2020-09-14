@@ -1,8 +1,8 @@
 apiVersion: appmesh.k8s.aws/v1beta2
 kind: Mesh
 metadata:
-  name: {{ .Values.name }}
+  name: {{ required "Please supply mesh.name value" .Values.mesh.name }}
 spec:
   namespaceSelector:
     matchLabels:
-      mesh: {{ .Values.name }}
+      mesh: {{ .Values.mesh.name }}

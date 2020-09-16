@@ -25,9 +25,11 @@ spec:
       annotations:
         buildID: {{ .Values.buildID | default "" | quote }}
     spec:
-      serviceAccountName: {{ .Values.mesh.podServiceAccount }}
+      {{- if .Values.ingress.fargate }}
+      serviceAccountName: {{ required "For Fargate Ingress fargatePodServiceAccount needs to be specified" .Values.appMesh.fargatePodServiceAccount }}
       securityContext:
         fsGroup: 1337
+      {{- end }}
       containers:
         - name: envoy # {{ .Chart.Name }}
         {{- if eq $awsRegion "me-south-1" }}
@@ -55,7 +57,7 @@ spec:
             - name: AWS_REGION
               value: {{ $awsRegion }}
             - name: APPMESH_RESOURCE_ARN
-              value: {{ required "Please specify App Mesh ARN" .Values.mesh.arn }}
+              value: {{ required "Please specify App Mesh ARN" .Values.appMesh.arn }}
             {{- $root := . }}
             {{- range $ref, $values := .Values.secrets }}
             {{- range $key, $value := $values }}

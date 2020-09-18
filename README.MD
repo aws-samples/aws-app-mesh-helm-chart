@@ -1,5 +1,7 @@
 # Helm Charts for creating AWS App Mesh and its Ingress Gateway
 
-1. Please create an [App Mesh](./mesh/README.md) first.
-3. Then install [App Mesh Gateway](./gateway/README.MD) in a meshed namespace. 
+There are two Helm charts here:
+
+1. A chart that creates an [App Mesh](./mesh/README.md).
+2. A chart installing [App Mesh Gateway](./gateway/README.MD) in a meshed namespace. 
 

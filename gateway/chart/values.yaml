@@ -30,7 +30,7 @@ appMesh:
 
 ingress:
   enabled: false
-  fargate: false # set to true if the namespace where the Gateway will be running is assigned to Fargate.
+  alb: false # if true, ALB Ingress Contoller needs to be pre-installed. If false, NLB will be used. Fargate supports ALB only for now.
   annotations:
     # kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: alb

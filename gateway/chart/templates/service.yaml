@@ -8,11 +8,11 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
   annotations:
-{{- if not .Values.ingress.fargate }}
+{{- if not .Values.ingress.alb }}
     service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 {{- end }}
 spec:
-{{- if .Values.ingress.fargate }}
+{{- if .Values.ingress.alb }}
   type: ClusterIP
 {{- else }}
   type: LoadBalancer

@@ -25,13 +25,13 @@ spec:
       annotations:
         buildID: {{ .Values.buildID | default "" | quote }}
     spec:
-      {{- if .Values.ingress.fargate }}
-      serviceAccountName: {{ required "For Fargate Ingress fargatePodServiceAccount needs to be specified" .Values.appMesh.fargatePodServiceAccount }}
+      {{- if .Values.appMesh.fargatePodServiceAccount }}
+      serviceAccountName: {{ .Values.appMesh.fargatePodServiceAccount }}
       securityContext:
         fsGroup: 1337
       {{- end }}
       containers:
-        - name: envoy # {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}
         {{- if eq $awsRegion "me-south-1" }}
           image: "772975370895.dkr.ecr.me-south-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- else if eq $awsRegion "ap-east-1" }}
@@ -54,10 +54,6 @@ spec:
               port: http
           {{- end }}
           env:
-            - name: AWS_REGION
-              value: {{ $awsRegion }}
-            - name: APPMESH_RESOURCE_ARN
-              value: {{ required "Please specify App Mesh ARN" .Values.appMesh.arn }}
             {{- $root := . }}
             {{- range $ref, $values := .Values.secrets }}
             {{- range $key, $value := $values }}

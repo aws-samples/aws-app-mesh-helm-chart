@@ -26,10 +26,10 @@ probes:
   enabled: false
 
 appMesh:
-  arn:
-  fargatePodServiceAccount: # meshed-pod-account 
+  fargatePodServiceAccount: # meshed-pod-account # Specify when running on EKS Fargate nodes
 
 ingress:
+  enabled: false
   fargate: false # set to true if the namespace where the Gateway will be running is assigned to Fargate.
   annotations:
     # kubernetes.io/tls-acme: "true"

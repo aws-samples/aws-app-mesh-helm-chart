@@ -1,19 +1,16 @@
-1. Get the application URL by running these commands:
-{{- if .Values.ingress.enabled }}
-{{- range .Values.ingress.hosts }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ . }}{{ $.Values.ingress.path }}
-{{- end }}
-{{- else if contains "NodePort" .Values.service.type }}
-  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "eks-app-mesh-gateway.fullname" . }})
-  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-  echo http://$NODE_IP:$NODE_PORT
-{{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch the status of by running 'kubectl get svc -w {{ template "eks-app-mesh-gateway.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "eks-app-mesh-gateway.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
-{{- else if contains "ClusterIP" .Values.service.type }}
+To check whether Ingress Gateway has deployed successfully
+1. Port-forward Envoy pod 
+  PowerShell:
+  $POD_NAME=(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "eks-app-mesh-gateway.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  "To check gateway configuration, visit http://127.0.0.1:9901/listeners, http://127.0.0.1:9901/clusters and http://127.0.0.1:9901/config_dump"
+  kubectl port-forward $POD_NAME 9901:9901
+
+  Bash:
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "eks-app-mesh-gateway.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl port-forward $POD_NAME 8080:80
-{{- end }}
+  echo "To check gateway configuration, visit http://127.0.0.1:9901/listeners, http://127.0.0.1:9901/clusters and http://127.0.0.1:9901/config_dump"
+  kubectl port-forward $POD_NAME 9901:9901
+      
+2. Browse to:
+  - http://127.0.0.1:9901/listeners - This page should not be blank *after first GatewayRoute is created*
+  - http://127.0.0.1:9901/clusters - After first GatewayRoute is created, this page should contain information about nodes *other than 127.0.0.1*
+  - http://127.0.0.1:9901/config_dump - Scroll down to see most consequential data *after first GatewayRoute is created*

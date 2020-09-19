@@ -51,4 +51,3 @@ spec:
               servicePort: {{ .Values.service.port | default 80 }}
   {{- end }}
 {{- end }}
-{{- end }}

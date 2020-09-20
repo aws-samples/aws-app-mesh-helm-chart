@@ -31,7 +31,7 @@ spec:
         fsGroup: 1337
       {{- end }}
       containers:
-        - name: envoy
+        - name: envoy # Name is very important here, do not change.
         {{- if eq $awsRegion "me-south-1" }}
           image: "772975370895.dkr.ecr.me-south-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- else if eq $awsRegion "ap-east-1" }}

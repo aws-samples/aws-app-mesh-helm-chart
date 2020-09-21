@@ -1,4 +1,4 @@
-This is a very simple Helm Chart for adding AWS App Mesh to an EKS Kubernetes cluster.
+This is a [very simple](../mesh/chart/templates/mesh.yaml) Helm Chart for adding AWS App Mesh to an EKS Kubernetes cluster.
 
 To prepare an AWS EKS cluster for adding an App Mesh by adding appropriate CRDs and installing App Mesh Controller, please run this PowerShell script:
 https://github.com/vgribok/AWS-PowerShell-Shortcuts/blob/master/src/App-Mesh-Controller-EKS-Installer.ps1

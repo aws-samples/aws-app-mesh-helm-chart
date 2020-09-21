@@ -26,7 +26,7 @@ probes:
   enabled: false
 
 appMesh:
-  fargatePodServiceAccount: # meshed-pod-account # Specify when running on EKS Fargate nodes
+  fargatePodServiceAccount: # envoy-fargate-pod-svcaccount # Specify when running on EKS Fargate nodes
 
 ingress:
   enabled: true # when set to true, a LB will be created to let the traffic into the mesh

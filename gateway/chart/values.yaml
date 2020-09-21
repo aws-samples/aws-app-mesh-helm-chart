@@ -29,7 +29,7 @@ appMesh:
   fargatePodServiceAccount: # meshed-pod-account # Specify when running on EKS Fargate nodes
 
 ingress:
-  enabled: false
+  enabled: true # when set to true, a LB will be created to let the traffic into the mesh
   alb: false # if true, ALB Ingress Contoller needs to be pre-installed. If false, NLB will be used. Fargate supports ALB only for now.
   annotations:
     # kubernetes.io/tls-acme: "true"

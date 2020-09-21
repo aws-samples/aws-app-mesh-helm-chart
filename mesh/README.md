@@ -11,23 +11,3 @@ Each Kubernetes **namespace** that will be a part of the mesh should be given fo
   appmesh.k8s.aws/sidecarInjectorWebhook: enabled
 ```
 
-## Command line examples
-
-## Failure: All defaults
-
-```PowerShell
-helm upgrade -i --dry-run `
- app-mesh `
- ./chart
-```
-
-The output should be an error message about the missing mesh name.
-
-## Happy path
-
-```PowerShell
-helm upgrade -i --dry-run `
- --set appMesh.name=some-name-for-the-mesh `
- app-mesh `
- ./chart
-```

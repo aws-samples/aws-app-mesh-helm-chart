@@ -1,11 +1,9 @@
-## My Project
+# Helm Charts for creating AWS App Mesh and its Ingress Gateway
 
-TODO: Fill this README out!
+There are two Helm charts here:
 
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+1. A chart that creates an [AWS App Mesh](./mesh/README.md).
+2. A chart installing [App Mesh Gateway](./gateway/README.MD) in a meshed namespace. 
 
 ## Security
 

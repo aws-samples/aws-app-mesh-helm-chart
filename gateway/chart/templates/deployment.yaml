@@ -1,6 +1,3 @@
-# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-
 {{- $awsRegion := required "Plese provide AWS region" .Values.image.awsRegion -}}
 apiVersion: apps/v1
 kind: Deployment
@@ -39,6 +36,8 @@ spec:
           image: "772975370895.dkr.ecr.me-south-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- else if eq $awsRegion "ap-east-1" }}
           image: "856666278305.dkr.ecr.ap-east-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
+        {{- else if eq $awsRegion "eu-south-1" }}
+          image: "422531588944.dkr.ecr.ap-east-1.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- else }}
           image: "840364872350.dkr.ecr.{{ $awsRegion }}.amazonaws.com/aws-appmesh-envoy:{{ .Values.image.tag }}"
         {{- end }}

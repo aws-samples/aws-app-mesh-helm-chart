@@ -9,7 +9,7 @@ replicaCount: 1
 
 image:
   awsRegion:
-  tag: v1.15.1.0-prod # Latest version info is at https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html
+  tag: v1.16.1.0-prod # Latest version info is at https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html
   pullPolicy: IfNotPresent
 imagePullSecrets: []
   # Optionally specify an array of imagePullSecrets.
@@ -36,6 +36,7 @@ ingress:
   alb: false # if true, ALB Ingress Contoller needs to be pre-installed. If false, NLB will be used. Fargate supports ALB only for now.
   annotations:
     # kubernetes.io/tls-acme: "true"
+    # alb.ingress.kubernetes.io/group.name: eks-reusable-ingress # Uncomment or override this value to share single ALB for multiple Ingress resources
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip

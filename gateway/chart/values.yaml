@@ -9,7 +9,7 @@ replicaCount: 1
 
 image:
   awsRegion:
-  tag: v1.16.1.0-prod # Latest version info is at https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html
+  tag: v1.16.1.1-prod # Latest version info is at https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html
   pullPolicy: IfNotPresent
 imagePullSecrets: []
   # Optionally specify an array of imagePullSecrets.
